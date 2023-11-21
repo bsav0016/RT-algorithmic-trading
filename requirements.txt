@@ -1,5 +1,4 @@
 git+https://github.com/bsav0016/alpaca-trade-api-python/
-alpaca-py==0.13.1
 async-timeout==4.0.3
 matplotlib==3.8.1
 numpy==1.26.1
