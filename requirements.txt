@@ -1,0 +1,9 @@
+git+https://github.com/bsav0016/alpaca-trade-api-python/tree/master/alpaca_trade_api
+alpaca-py==0.13.1
+async-timeout==4.0.3
+matplotlib==3.8.1
+numpy==1.26.1
+pandas==2.1.2
+python-dateutil==2.8.2
+websocket-client==1.6.4
+websockets==11.0.3
