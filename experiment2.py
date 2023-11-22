@@ -46,8 +46,8 @@ async def run_experiment(bar):
     impact = 0.005
     sd_in = dt.date.today() - dt.timedelta(days = 365)
     ed_in = dt.date.today()
-    ed_in = datetime.combine(start_date, time.min)
-    sd_in = datetime.combine(end_date, time.min)
+    ed_in = dt.combine(start_date, time.min)
+    sd_in = dt.combine(end_date, time.min)
 
     print(sd_in, ed_in)
 
