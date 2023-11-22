@@ -65,7 +65,7 @@ def get_buy_power():
 
     account = trading_client.get_account()
     for property_name, value in account:
-        if property_name == "cash":
+        if property_name == "non_marginable_buying_power":
             return value
 
 def get_current_position(symbol):
@@ -75,13 +75,11 @@ def get_current_position(symbol):
 
     positions = trading_client.get_all_positions()
 
-    holding = 0
-
     for position in positions:
         if position.symbol == symbol:
             return position.qty
 
-    return holding
+    return 0
 
 def make_trade(symbol, quantity, order_type, crypto):
     print("Symbol, quantity, order type")

@@ -35,7 +35,7 @@ async def run_experiment(bar):
     timestamp = bar.timestamp
     timestamp /= 10**9
     if crypto:
-        if not int(timestamp % 86400) == 60:
+        if not int(timestamp % 86400) == 0 and False:
             return
     else:
         if not int(timestamp % 86400) == 52140:
@@ -46,6 +46,8 @@ async def run_experiment(bar):
     impact = 0.005
     sd_in = dt.date.today() - dt.timedelta(days = 365)
     ed_in = dt.date.today()
+
+    print(sd_in, ed_in)
 
     buy_power = get_buy_power()
     current_position = get_current_position(symbol)
