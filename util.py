@@ -35,6 +35,8 @@ def get_base_url():
 def get_crypto_data(symbol="BTC/USD", time_frame=TimeFrame.Day, start_date=dt.datetime(2020, 1, 1), end_date=dt.datetime(2022, 1, 1)):
     client = CryptoHistoricalDataClient()
 
+    print(start_date, end_date)
+
     request_params = CryptoBarsRequest(
                         symbol_or_symbols=[symbol],
                         timeframe=time_frame,
