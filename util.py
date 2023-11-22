@@ -10,7 +10,6 @@ from alpaca_trade_api.common import URL
 from alpaca.trading.client import TradingClient
 from alpaca.trading.requests import MarketOrderRequest
 from alpaca.trading.enums import OrderSide, TimeInForce
-import time
 
 
 ALPACA_API_KEY = 'AK66FMJPPNJZGUSYE6GK' #Live
