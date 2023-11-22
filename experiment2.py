@@ -35,7 +35,7 @@ async def run_experiment(bar):
     timestamp = bar.timestamp
     timestamp /= 10**9
     if crypto:
-        if not int(timestamp % 86400) == 0 and False:
+        if not int(timestamp % 86400) == 0:
             return
     else:
         if not int(timestamp % 86400) == 52140:
