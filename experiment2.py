@@ -15,6 +15,8 @@ crypto = True
 """symbol = "AAPL"
 crypto = False"""
 
+current_day = True
+
 def get_buy_power():
     return util.get_buy_power()
 
@@ -32,14 +34,15 @@ def make_trade(symbol, quantity, order_type, crypto):
     return
 
 async def run_experiment(bar):
+    global current_day
+    if current_day == True:
+        current_day = dt.date.today() - dt.timedelta(days = 1)
     timestamp = bar.timestamp
-    timestamp /= 10**9
-    if crypto:
-        if not int(timestamp % 86400) == 0:
-            return
+    converted_datetime = dt.date.fromtimestamp(timestamp/10**9)
+    if converted_datetime == current_day:
+        return
     else:
-        if not int(timestamp % 86400) == 52140:
-            return
+        current_day = converted_datetime
     print("Bar", bar)
     price = bar.close
     commission = 0
