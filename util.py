@@ -84,6 +84,7 @@ def get_current_position(symbol):
 def make_trade(symbol, quantity, order_type, crypto):
     print("Symbol, quantity, order type")
     print(symbol, quantity, order_type)
+    print("\n")
     if order_type == 0:
         return
     
