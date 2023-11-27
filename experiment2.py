@@ -46,7 +46,7 @@ async def run_experiment(bar):
     print("Bar", bar)
     price = bar.close
     commission = 0
-    impact = 0.005
+    impact = 0.0025
     sd_in = dt.date.today() - dt.timedelta(days = 365)
     ed_in = dt.date.today()
     sd_in = dt.datetime(sd_in.year, sd_in.month, sd_in.day)
