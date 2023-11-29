@@ -27,7 +27,7 @@ def get_trade(symbol, sd_in, ed_in, impact, commission, current_position, crypto
     learner = sl.StrategyLearner(verbose=False, impact=impact, commission=commission)
     learner.add_evidence(symbol=symbol, sd=sd_in, ed=ed_in, crypto=crypto)
 
-    return learner.get_trade(current_position)
+    return learner.get_trade(current_position, crypto)
 
 def make_trade(symbol, quantity, order_type, crypto):
     util.make_trade(symbol, quantity, order_type, crypto)
@@ -49,18 +49,13 @@ async def run_experiment(bar):
         return
     else:
         current_day = converted_datetime
-    print("Bar", bar)
     price = bar.close
     commission = 0
     impact = 0.004
     sd_in = dt.datetime.utcnow() - dt.timedelta(days = 365)
     ed_in = dt.datetime.utcnow()
-    """sd_in = dt.date.today() - dt.timedelta(days = 365)
-    ed_in = dt.date.today()
-    sd_in = dt.datetime(sd_in.year, sd_in.month, sd_in.day)
-    ed_in = dt.datetime(ed_in.year, ed_in.month, ed_in.day)"""
-
-    print("Start and end date: ", sd_in, ed_in)
+    sd_in = dt.datetime(2022, 5, 27) #testing new method
+    ed_in = dt.datetime(2023, 5, 27) #testing new method
 
     buy_power = get_buy_power()
     current_position = get_current_position(symbol)

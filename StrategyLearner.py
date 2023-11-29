@@ -35,9 +35,9 @@ class StrategyLearner(object):
         self.ed = ed
         rsi_window = 14  
         ema_window = 14
-        rsi = indicators.rsi(data['close'], rsi_window, sd, ed)
-        ema = indicators.ema(data['close'], ema_window, sd, ed)
-        momentum = indicators.momentum(data['close'], sd, ed)
+        rsi = indicators.rsi(data['close'], rsi_window)
+        ema = indicators.ema(data['close'], ema_window)
+        momentum = indicators.momentum(data['close'])
         combined_df = pd.concat([rsi, ema, momentum], axis=1)
         x = combined_df.values
         changes = data['close']/data['close'].shift(1)
@@ -66,9 +66,9 @@ class StrategyLearner(object):
         sv = self.sv
         rsi_window = 14
         ema_window = 14
-        rsi = indicators.rsi(data['close'], rsi_window, sd, ed)
-        ema = indicators.ema(data['close'], ema_window, sd, ed)
-        momentum = indicators.momentum(data['close'], sd, ed)
+        rsi = indicators.rsi(data['close'], rsi_window)
+        ema = indicators.ema(data['close'], ema_window)
+        momentum = indicators.momentum(data['close'])
         combined_df = pd.concat([rsi, ema, momentum], axis=1)
         combined_df = combined_df.dropna()
         x = combined_df.to_numpy()
@@ -129,17 +129,23 @@ class StrategyLearner(object):
         df_trades = df_trades.set_index('Date')
         return df_trades
 
-    def get_trade(self, current_position):
+    def get_trade(self, current_position, crypto):
         data = self.data
         symbol = self.symbol
-        sd = self.sd
-        ed = self.ed
         sv = self.sv
         rsi_window = 14
         ema_window = 14
-        rsi = indicators.rsi(data['close'], rsi_window, sd, ed, True)
-        ema = indicators.ema(data['close'], ema_window, sd, ed, True)
-        momentum = indicators.momentum(data['close'], sd, ed, True)
+        sd_recent = dt.datetime.utcnow() - dt.timedelta(days = 2*max([rsi_window, ema_window]))
+        ed_recent = dt.datetime.utcnow()
+        if crypto:
+            recent_data = get_crypto_data(symbol=symbol, start_date=sd_recent, end_date=ed_recent)
+        else:
+            recent_data = get_data(symbol=symbol, start_date=sd_recent, end_date=ed_recent)
+        recent_data.reset_index(level='symbol', inplace=True)
+        print("Last pulled bar", recent_data.iloc[-1])
+        rsi = indicators.rsi(recent_data['close'], rsi_window, True)
+        ema = indicators.ema(recent_data['close'], ema_window, True)
+        momentum = indicators.momentum(recent_data['close'], True)
         combined_df = pd.concat([rsi, ema, momentum], axis=1)
         combined_df = combined_df.dropna()
         x = combined_df.to_numpy()

@@ -5,7 +5,7 @@ import pandas as pd
 import datetime as dt
 
 
-def bollinger_bands(test_data, bb_window, sd, ed):
+def bollinger_bands(test_data, bb_window):
   data = test_data.copy()
   sma = test_data.rolling(window=bb_window).mean()
   std = test_data.rolling(window=bb_window).std()
@@ -15,7 +15,7 @@ def bollinger_bands(test_data, bb_window, sd, ed):
   bbp_upper = (data-bb_upper)/bb_upper
   return bbp_lower, bbp_upper
 
-def rsi(test_data, rsi_window, sd, ed, verbose=False):
+def rsi(test_data, rsi_window, verbose=False):
   data = test_data.copy()
   data['Diff'] = data - data.shift(1)
   data['Gain'] = data['Diff'].where(data['Diff'] > 0, 0)
@@ -28,19 +28,19 @@ def rsi(test_data, rsi_window, sd, ed, verbose=False):
     print("RSI: ", rsi.iloc[-1])
   return rsi
 
-def ema(test_data, ema_window, sd, ed, verbose=False):
+def ema(test_data, ema_window, verbose=False):
   ema = test_data.ewm(span=ema_window, adjust=False).mean()-test_data
   if verbose:
     print("EMA: ", ema.iloc[-1])
   return ema
 
-def momentum(test_data, sd, ed, verbose=False):
+def momentum(test_data, verbose=False):
   momentum = test_data/test_data.shift(1)
   if verbose:
     print("Momentum: ", momentum.iloc[-1])
   return momentum
 
-def stochastic(test_data, stochastic_window1, stochastic_window2, sd, ed):
+def stochastic(test_data, stochastic_window1, stochastic_window2):
   data = test_data.copy()
   data['High'] = test_data.rolling(window=stochastic_window1).max()
   data['Low'] = test_data.rolling(window=stochastic_window1).min()
