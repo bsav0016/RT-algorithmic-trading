@@ -52,7 +52,7 @@ async def run_experiment(bar):
     print("Bar", bar)
     price = bar.close
     commission = 0
-    impact = 0.0025
+    impact = 0.004
     sd_in = dt.datetime.utcnow() - dt.timedelta(days = 365)
     ed_in = dt.datetime.utcnow()
     """sd_in = dt.date.today() - dt.timedelta(days = 365)
