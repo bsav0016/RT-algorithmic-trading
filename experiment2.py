@@ -43,7 +43,7 @@ async def run_experiment(bar):
     seconds_in_day = timestamp_seconds % 86400
     bar_start = 21659 # we need to wait for the old bar to load (06:00:59 gives extra time)
     too_late = bar_start + 60*15 # we don't want to do anything if it's significantly later (> 15 minutes)
-    too_late = 86400 # for testing only
+    #too_late = 86400 # for testing only
     if converted_datetime == current_day or seconds_in_day <= bar_start or seconds_in_day > too_late:
         return
     else:
