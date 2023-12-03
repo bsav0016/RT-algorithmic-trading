@@ -37,21 +37,20 @@ async def run_experiment(bar):
     global current_day
     if current_day == True:
         current_day = dt.datetime.utcnow().date() - dt.timedelta(days = 2)
-        #current_day = dt.date.today() - dt.timedelta(days = 1)
     timestamp = bar.timestamp
     timestamp_seconds = timestamp/10**9
     converted_datetime = dt.date.fromtimestamp(timestamp_seconds)
     seconds_in_day = timestamp_seconds % 86400
     bar_start = 21659 # we need to wait for the old bar to load (06:00:59 gives extra time)
-    too_late = 43200 # we don't want to do anything if it's afternoon
-    #too_late = 86400 # for testing only
+    too_late = bar_start + 60*15 # we don't want to do anything if it's significantly later (> 15 minutes)
+    too_late = 86400 # for testing only
     if converted_datetime == current_day or seconds_in_day <= bar_start or seconds_in_day > too_late:
         return
     else:
         current_day = converted_datetime
     price = bar.close
     commission = 0
-    impact = 0.004
+    impact = 0.003
     sd_in = dt.datetime.utcnow() - dt.timedelta(days = 365)
     ed_in = dt.datetime.utcnow()
     sd_in = dt.datetime(2022, 5, 27) #testing new method
@@ -60,7 +59,7 @@ async def run_experiment(bar):
     buy_power = get_buy_power()
     current_position = get_current_position(symbol)
     trade_type = get_trade(symbol, sd_in, ed_in, impact, commission, current_position, crypto)
-    quantity = float(buy_power)/float(price)*0.95
+    quantity = float(buy_power)/float(price)*0.99
     if trade_type == -1:
         quantity = current_position
     make_trade(symbol, quantity, trade_type, crypto)

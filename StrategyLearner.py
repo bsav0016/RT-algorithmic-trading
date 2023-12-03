@@ -136,7 +136,8 @@ class StrategyLearner(object):
         rsi_window = 14
         ema_window = 14
         sd_recent = dt.datetime.utcnow() - dt.timedelta(days = 2*max([rsi_window, ema_window]))
-        ed_recent = dt.datetime.utcnow()
+        ed_recent = dt.datetime.utcnow()# - dt.timedelta(days = 1)
+        ed_recent = dt.datetime(ed_recent.year, ed_recent.month, ed_recent.day)
         if crypto:
             recent_data = get_crypto_data(symbol=symbol, start_date=sd_recent, end_date=ed_recent)
         else:
