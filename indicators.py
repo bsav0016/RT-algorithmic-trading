@@ -29,13 +29,15 @@ def rsi(test_data, rsi_window, verbose=False):
   return rsi
 
 def ema(test_data, ema_window, verbose=False):
-  ema = test_data.ewm(span=ema_window, adjust=False).mean()-test_data
+  data = test_data.copy()
+  ema = (data.ewm(span=ema_window, adjust=False).mean()-data) / data
   if verbose:
     print("EMA: ", ema.iloc[-1])
   return ema
 
 def momentum(test_data, verbose=False):
-  momentum = test_data/test_data.shift(1)
+  data = test_data.copy()
+  momentum = data/data.shift(1)
   if verbose:
     print("Momentum: ", momentum.iloc[-1])
   return momentum
@@ -46,4 +48,17 @@ def stochastic(test_data, stochastic_window1, stochastic_window2):
   data['Low'] = test_data.rolling(window=stochastic_window1).min()
   data['K'] = 100 * ((test_data-data['Low']) / (data['High']-data['Low']))
   data['D'] = data['K'].rolling(window=stochastic_window2).mean()
-  return stochastic
+  return data['D']
+
+def macd_signal(test_data, short_window, long_window, signal_window):
+  data = test_data.copy()
+  short_ema = data.ewm(span=short_window, adjust=False).mean()
+  long_ema = data.ewm(span=long_window, adjust=False).mean()
+  
+  # Calculate MACD line
+  macd_line = short_ema - long_ema
+  
+  # Calculate signal line (EMA of MACD)
+  signal_line = macd_line.ewm(span=signal_window, adjust=False).mean()
+  
+  return signal_line

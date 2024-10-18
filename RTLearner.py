@@ -3,7 +3,7 @@ import random
 
 class RTLearner(object):
 
-    def __init__(self, leaf_size=5, verbose=False):
+    def __init__(self, leaf_size=3, verbose=False):
         self.leaf_size = leaf_size
         self.model = []
         np.random.seed(903951120)

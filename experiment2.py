@@ -15,6 +15,14 @@ crypto = True
 """symbol = "AAPL"
 crypto = False"""
 
+commission = 0
+impact = 0.003
+rsi_window = 14
+ema_window = 14
+bb_window = 14
+stochastic_window1 = 3
+stochastic_window2 = 14
+
 current_day = True
 
 def get_buy_power():
@@ -24,7 +32,7 @@ def get_current_position(symbol):
     return util.get_current_position(symbol)
 
 def get_trade(symbol, sd_in, ed_in, impact, commission, current_position, crypto=False):
-    learner = sl.StrategyLearner(verbose=False, impact=impact, commission=commission)
+    learner = sl.StrategyLearner(verbose=False, impact=impact, commission=commission, rsi_window=rsi_window, ema_window=ema_window, bb_window=bb_window, stochastic_window1=stochastic_window1, stochastic_window2=stochastic_window2)
     learner.add_evidence(symbol=symbol, sd=sd_in, ed=ed_in, crypto=crypto)
 
     return learner.get_trade(current_position, crypto)
@@ -49,8 +57,6 @@ async def run_experiment(bar):
     else:
         current_day = converted_datetime
     price = bar.close
-    commission = 0
-    impact = 0.003
     sd_in = dt.datetime.utcnow() - dt.timedelta(days = 365)
     ed_in = dt.datetime.utcnow()
     sd_in = dt.datetime(2022, 5, 27) #testing new method
@@ -59,7 +65,7 @@ async def run_experiment(bar):
     buy_power = get_buy_power()
     current_position = get_current_position(symbol)
     trade_type = get_trade(symbol, sd_in, ed_in, impact, commission, current_position, crypto)
-    quantity = float(buy_power)/float(price)*0.99
+    quantity = float(buy_power)/float(price)*0.97
     if trade_type == -1:
         quantity = current_position
     make_trade(symbol, quantity, trade_type, crypto)

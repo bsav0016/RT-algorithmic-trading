@@ -6,6 +6,17 @@ import StrategyLearner as sl
 import marketsimcode as msc
 from ManualStrategy import benchmark_trades as benchmark_strategy
 
+start_val = 100000
+commission = 0
+impact = 0.003
+symbol = "BTC/USD"
+crypto = True
+num_shares = 2.5
+sd_in = dt.datetime(2021, 1, 1)
+ed_in = dt.datetime(2022, 1, 1)
+sd_out = dt.datetime(2022, 1, 1)
+ed_out = dt.datetime(2023, 1, 1)
+
 def ensure_tz_aware(timestamp, tz='UTC'):
     if timestamp.tzinfo is None:
         return timestamp.tz_localize(tz)
@@ -13,7 +24,7 @@ def ensure_tz_aware(timestamp, tz='UTC'):
         return timestamp
 
 def strategy_learner(symbol, sd_in, ed_in, sd_out, ed_out, sv, commission, impact, num_shares, crypto):
-    learner = sl.StrategyLearner(verbose=False, impact=impact, commission=commission)
+    learner = sl.StrategyLearner(verbose=False, symbol=symbol, impact=impact, commission=commission)
     learner.add_evidence(symbol=symbol, sd=sd_in, ed=ed_in, crypto=crypto)
  
     df_trades_in = learner.testPolicy(num_shares=num_shares, sd_test=sd_in, ed_test=ed_in, crypto=crypto)
@@ -41,7 +52,6 @@ def strategy_learner(symbol, sd_in, ed_in, sd_out, ed_out, sv, commission, impac
     sl_portvals_out = sl_portvals_out.sort_index(ascending=False)
     sl_portvals_in = sl_portvals_in.reindex(index=date_range_in, method='ffill')
     sl_portvals_out = sl_portvals_out.reindex(index=date_range_out, method='ffill')
-    print(sl_portvals_out)
 
     return sl_portvals_in, sl_portvals_out
 
@@ -53,16 +63,6 @@ def get_results(symbol, sd, ed, sv, commission, impact, num_shares, crypto):
     return benchmark_portvals
 
 def run_experiment():
-    start_val = 100000
-    commission = 0
-    impact = 0.003
-    symbol = "ETH/USD"
-    crypto = True
-    num_shares = 25
-    sd_in = dt.datetime(2021, 11, 27)
-    ed_in = dt.datetime(2022, 11, 27)
-    sd_out = dt.datetime(2022, 11, 27)
-    ed_out = dt.datetime(2023, 11, 28)
     in_sample = get_results(symbol, sd_in, ed_in, start_val, commission, impact, num_shares, crypto)
     sl_result = strategy_learner(symbol, sd_in, ed_in, sd_out, ed_out, start_val, commission, impact, num_shares, crypto)
     sl_result_in = sl_result[0]
